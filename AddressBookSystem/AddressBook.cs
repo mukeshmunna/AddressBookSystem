@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -64,6 +63,20 @@ namespace AddressBookProblem
                 }
                 else { Console.WriteLine("Not name found"); }
             }
+        }
+
+        public void DeleteContact(string name)
+        {
+            Contact contact = new Contact();
+            foreach (var data in addressBook)
+            {
+                if (contact.FirstName.Equals(name) || contact.LastName.Equals(name))
+                {
+                    contact = data;
+                }
+
+            }
+            addressBook.Remove(contact);
         }
 
         public void Display()

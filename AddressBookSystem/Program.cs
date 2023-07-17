@@ -10,7 +10,7 @@ internal class Program
         AddressBook addressBook = new AddressBook();
         while (flag)
         {
-            Console.WriteLine("Enter the option to proceed \n1. Create Contact \n2. Edit Details \n3. View \n4. Exit");
+            Console.WriteLine("Enter the option to proceed \n1. Create Contact \n2. Edit Details \n3. View  \n4. Delete Details \n5. Exit");
             int option = Convert.ToInt32(Console.ReadLine());
             switch (option)
             {
@@ -26,10 +26,22 @@ internal class Program
                 case 3:
                     addressBook.Display();
                     break;
-
                 case 4:
+                    Console.WriteLine("Enter name to Delete Contact details\n");
+                    string name = Console.ReadLine();
+                    addressBook.DeleteContact(name);
+                    break;
+
+                case 5:
                     flag = false;
                     break;
+                default:
+                    Console.WriteLine("Invalid Value");
+                    break;
+
+
+
+
             }
         }
 
