@@ -21,7 +21,6 @@ internal class Program
                 case 2:
                     Console.WriteLine("Enter name to Edit Contact details\n");
                     string input = Console.ReadLine();
-                    addressBook.EditContact(input);
                     break;
                 case 3:
                     addressBook.Display();
@@ -29,7 +28,6 @@ internal class Program
                 case 4:
                     Console.WriteLine("Enter name to Delete Contact details\n");
                     string name = Console.ReadLine();
-                    addressBook.DeleteContact(name);
                     break;
 
                 case 5:

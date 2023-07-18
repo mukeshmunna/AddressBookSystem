@@ -9,7 +9,8 @@ namespace AddressBookProblem
 {
     public class AddressBook
     {
-        List<Contact> addressBook = new List<Contact>(); //created list to store multiple contact
+        List<Contact> addressBook = new List<Contact>();
+        Dictionary<string, List<Contact>> dict = new Dictionary<string, List<Contact>>();
         public void CreateContact()
         {
             Console.WriteLine("Enter the detais :\n 1.First Name \n2.Last name \n3.Address \n4.City Name \n5.State Name \n.6.Zip code \n7.Phone Number \n8.Email Address ");
@@ -28,55 +29,77 @@ namespace AddressBookProblem
             addressBook.Add(contact);
 
         }
-        public void EditContact(string name)
+        public void AddressBookToDictionary()
         {
-            foreach (var contact in addressBook)
+            string uniqueName = Console.ReadLine();
+            dict.Add(uniqueName, addressBook);
+            addressBook = null;
+        }
+        public void EditContact(string name, string contactName)
+        {
+            foreach (var data in dict)
             {
-                if (contact.FirstName.Equals(name) || contact.LastName.Equals(name))
-                {
-                    Console.WriteLine("Enter the option to Edit -->  \n1.Last name \n2.Address \n3.City Name \n4.State Name \n.5.Zip code \n6.Phone Number \n7.Email Address ");
-                    int option = Convert.ToInt32(Console.ReadLine());
-                    switch (option)
-                    {
-                        case 1:
-                            contact.LastName = Console.ReadLine();
-                            break;
-                        case 2:
-                            contact.Address = Console.ReadLine();
-                            break;
-                        case 3:
-                            contact.City = Console.ReadLine();
-                            break;
-                        case 4:
-                            contact.State = Console.ReadLine();
-                            break;
-                        case 5:
-                            contact.Zip = Convert.ToInt32(Console.ReadLine());
-                            break;
-                        case 6:
-                            contact.PhoneNumber = Convert.ToInt32(Console.ReadLine());
-                            break;
-                        case 7:
-                            contact.Email = Console.ReadLine();
-                            break;
+                if (data.Key.Equals(name))
+                { 
+                    foreach (var contact in data.Value)
+                    { 
+                        if (contact.FirstName.Equals(name) || contact.LastName.Equals(name))
+                        {
+                            Console.WriteLine("Enter the option to Edit -->  \n1.Last name \n2.Address \n3.City Name \n4.State Name \n.5.Zip code \n6.Phone Number \n7.Email Address ");
+                            int option = Convert.ToInt32(Console.ReadLine());
+                            switch (option)
+                            {
+                                case 1:
+                                    contact.LastName = Console.ReadLine();
+                                    break;
+                                case 2:
+                                    contact.Address = Console.ReadLine();
+                                    break;
+                                case 3:
+                                    contact.City = Console.ReadLine();
+                                    break;
+                                case 4:
+                                    contact.State = Console.ReadLine();
+                                    break;
+                                case 5:
+                                    contact.Zip = Convert.ToInt32(Console.ReadLine());
+                                    break;
+                                case 6:
+                                    contact.PhoneNumber = Convert.ToInt32(Console.ReadLine());
+                                    break;
+                                case 7:
+                                    contact.Email = Console.ReadLine();
+                                    break;
+                            }
+                        }
                     }
                 }
                 else { Console.WriteLine("Not name found"); }
             }
         }
 
-        public void DeleteContact(string name)
+        public void DeleteContact(string name,string contactName)
         {
             Contact contact = new Contact();
-            foreach (var data in addressBook)
+            foreach (var data in dict)
             {
-                if (contact.FirstName.Equals(name) || contact.LastName.Equals(name))
+                if (data.Key.Equals(name))
                 {
-                    contact = data;
+                    foreach (var item in data.Value)
+                    {
+                        if (item.FirstName.Equals(contactName) || item.LastName.Equals(contactName))
+                        {
+                            contact = item;
+                        }
+                    }
+                    data.Value.Remove(contact);
                 }
-
+                else
+                {
+                    Console.WriteLine("No dictionary with key Exists");
+                }
             }
-            addressBook.Remove(contact);
+            
         }
 
         public void Display()
