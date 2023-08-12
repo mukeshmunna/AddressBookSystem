@@ -1,47 +1,58 @@
-﻿using AddressBookProblem;
+﻿using System;
+using System.Collections.Generic;
 
-internal class Program
+namespace AddressBook
 {
-    private static void Main(string[] args)
+    public class Program
     {
-
-        Console.WriteLine("Welcome to Address book Problem :");
-        bool flag = true;
-        AddressBook addressBook = new AddressBook();
-        while (flag)
+        private static void Main(string[] args)
         {
-            Console.WriteLine("Enter the option to proceed \n1. Create Contact \n2. Edit Details \n3. View  \n4. Delete Details \n5. Exit");
-            int option = Convert.ToInt32(Console.ReadLine());
-            switch (option)
+            Console.WriteLine("Welcome to Address Book program");
+            Addressbook addressbook = new Addressbook();
+
+            bool flag = true;
+            while (flag)
             {
-                case 1:
-                    Console.WriteLine("Creating contact : -->\n");
-                    addressBook.CreateContact();
-                    break;
-                case 2:
-                    Console.WriteLine("Enter name to Edit Contact details\n");
-                    string input = Console.ReadLine();
-                    break;
-                case 3:
-                    addressBook.Display();
-                    break;
-                case 4:
-                    Console.WriteLine("Enter name to Delete Contact details\n");
-                    string name = Console.ReadLine();
-                    break;
-
-                case 5:
-                    flag = false;
-                    break;
-                default:
-                    Console.WriteLine("Invalid Value");
-                    break;
-
-
-
+                Console.WriteLine("1.Create Contact\n2.Add to Dictionary\n3.Edit Contact\n4.Display Contacts\n5.Delete Contact\n6.Serialize dict to JSON\n7.Exit");
+                int choice = Convert.ToInt32(Console.ReadLine());
+                string key;
+                switch (choice)
+                {
+                    case 1:
+                        addressbook.CreateContact();
+                        break;
+                    case 2:
+                        addressbook.AddAddressBookToDictionary();
+                        break;
+                    case 3:
+                        Console.WriteLine("Enter key");
+                        key = Console.ReadLine();
+                        Console.WriteLine("Enter the first name");
+                        string fname = Console.ReadLine();
+                        addressbook.EditContact(key, fname);
+                        break;
+                    case 4:
+                        addressbook.DisplayContacts();
+                        break;
+                    case 5:
+                        Console.WriteLine("Enter key");
+                        key = Console.ReadLine();
+                        Console.WriteLine("Enter name");
+                        string name = Console.ReadLine();
+                        addressbook.DeleteContact(key, name);
+                        break;
+                    case 6:
+                        addressbook.WriteToJsonFile(file_path);
+                        break;
+                    case 7:
+                        flag = false;
+                        break;
+                    default:
+                        Console.WriteLine("Enter correct choice");
+                        break;
+                }
 
             }
         }
-
     }
 }

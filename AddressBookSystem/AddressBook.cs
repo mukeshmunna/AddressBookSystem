@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Data;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AddressBookProblem
+namespace AddressBook
 {
-    public class AddressBook
+    public class Addressbook
     {
-        List<Contact> addressBook = new List<Contact>();
+        List<Contact> addressbooklist = new List<Contact>();
         Dictionary<string, List<Contact>> dict = new Dictionary<string, List<Contact>>();
         public void CreateContact()
         {
-            Console.WriteLine("Enter the detais :\n 1.First Name \n2.Last name \n3.Address \n4.City Name \n5.State Name \n.6.Zip code \n7.Phone Number \n8.Email Address ");
+            Console.WriteLine("Enter the details\n1.First Name\n2.Last Name\n3.Address \n4.City Name \n5.State Name \n6.Zip code \n7.Phone Number \n8.Email Address ");
             Contact contact = new Contact()
             {
                 FirstName = Console.ReadLine(),
@@ -25,27 +26,35 @@ namespace AddressBookProblem
                 PhoneNumber = Convert.ToInt32(Console.ReadLine()),
                 Email = Console.ReadLine(),
             };
-            Console.WriteLine(contact.FirstName + "\n " + contact.LastName + "\n " + contact.Address + "\n " + contact.City + "\n " + contact.State + "\n " + contact.Zip + "\n " + contact.PhoneNumber + "\n " + contact.Email);
-            addressBook.Add(contact);
-
+            if (CheckName(contact))
+            {
+                Console.WriteLine("Name is already present");
+            }
+            else
+            {
+                Console.WriteLine("Added Contact :");
+                Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                addressbooklist.Add(contact);
+            }
         }
-        public void AddressBookToDictionary()
+        public void AddAddressBookToDictionary()
         {
-            string uniqueName = Console.ReadLine();
-            dict.Add(uniqueName, addressBook);
-            addressBook = null;
+            Console.WriteLine("Enter a unique key");
+            string uniquename = Console.ReadLine();
+            dict.Add(uniquename, addressbooklist);
+            addressbooklist = new List<Contact>();
         }
-        public void EditContact(string name, string contactName)
+        public void EditContact(string name, string contactname)
         {
             foreach (var data in dict)
             {
                 if (data.Key.Equals(name))
-                { 
-                    foreach (var contact in data.Value)
-                    { 
-                        if (contact.FirstName.Equals(name) || contact.LastName.Equals(name))
+                {
+                    foreach (Contact contact in data.Value)
+                    {
+                        if (contact.FirstName.Equals(contactname) || contact.LastName.Equals(contactname))
                         {
-                            Console.WriteLine("Enter the option to Edit -->  \n1.Last name \n2.Address \n3.City Name \n4.State Name \n.5.Zip code \n6.Phone Number \n7.Email Address ");
+                            Console.WriteLine("Enter what to edit\n1.Last Name\n2.Address \n3.City Name \n4.State Name \n5.Zip code \n6.Phone Number \n7.Email Address ");
                             int option = Convert.ToInt32(Console.ReadLine());
                             switch (option)
                             {
@@ -70,45 +79,69 @@ namespace AddressBookProblem
                                 case 7:
                                     contact.Email = Console.ReadLine();
                                     break;
+                                default:
+                                    break;
                             }
+                            Console.WriteLine("Edited Details");
+                            Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
                         }
                     }
                 }
-                else { Console.WriteLine("Not name found"); }
             }
         }
 
-        public void DeleteContact(string name,string contactName)
+        public void DeleteContact(string name, string contactname)
         {
             Contact contact = new Contact();
-            foreach (var data in dict)
+            foreach (var item in dict)
             {
-                if (data.Key.Equals(name))
+                if (item.Key.Equals(name))
                 {
-                    foreach (var item in data.Value)
+                    foreach (var data in item.Value)
                     {
-                        if (item.FirstName.Equals(contactName) || item.LastName.Equals(contactName))
+                        if (data.FirstName.Equals(contactname) || data.LastName.Equals(contactname))
                         {
-                            contact = item;
+                            contact = data;
                         }
                     }
-                    data.Value.Remove(contact);
+                    item.Value.Remove(contact);
+                    Console.WriteLine("Contact Removed");
                 }
                 else
                 {
-                    Console.WriteLine("No dictionary with key Exists");
+                    Console.WriteLine("No dictionary with key exists");
                 }
             }
-            
         }
 
-        public void Display()
+        public void DisplayContacts()
         {
-            foreach (var data in addressBook)
+            foreach (var data in dict)
             {
-                Console.WriteLine("View Details \n");
-                Console.WriteLine(data.FirstName + "\n" + data.LastName + "\n" + data.Address + "\n" + data.City + "\n" + data.State + "\n" + data.Zip + "\n" + data.PhoneNumber + "\n" + data.Email + "\n");
+                Console.WriteLine(data.Key);
+                int c = 1;
+                foreach (Contact contact in data.Value)
+                {
+                    Console.WriteLine("Contact " + c + ":");
+                    Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                    c++;
+                }
             }
+        }
+
+        public bool CheckName(Contact contact)
+        {
+            string name = contact.FirstName;
+            List<Contact> list2 = null;
+            foreach (var data in dict)
+            {
+                list2 = data.Value.Where(x => x.FirstName.Equals(name)).ToList();
+            }
+            if (list2 == null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
