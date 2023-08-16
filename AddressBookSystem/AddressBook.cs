@@ -132,11 +132,7 @@ namespace AddressBook
                 }
             }
         }
-        public void WriteToJsonFile(string filepath)
-        {
-            var json = JsonConvert.SerializeObject(dict);
-            File.WriteAllText(filepath, json);
-        }
+
 
         public bool CheckName(Contact contact)
         {
@@ -188,7 +184,7 @@ namespace AddressBook
             {
                 foreach (var item in data)
                 {
-                    if (!cityDict.Keys.Equals(item.City))
+                    if (!cityDict.Keys.Equals(item.City) && !cityDict.ContainsKey(item.City))
                     {
                         List<Contact> list = new List<Contact>();
                         list.Add(item);
@@ -320,6 +316,30 @@ namespace AddressBook
                         }
                     }
                     break;
+                case 4:
+                    List<int> list2 = new List<int>();
+                    foreach (var data in dict)
+                    {
+                        foreach (var item in data.Value)
+                        {
+                            list2.Add(item.Zip);
+                            contacts.Add(item);
+                        }
+                    }
+                    list.Sort();
+                    foreach (var data in list2)
+                    {
+                        foreach (var contact in contacts)
+                        {
+                            if (contact.Zip.Equals(data))
+                            {
+                                Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                                Console.WriteLine("-------");
+                                Console.WriteLine();
+                            }
+                        }
+                    }
+                    break;
             }
         }
         public void DisplayDict(Dictionary<string, List<Contact>> dict)
@@ -343,5 +363,44 @@ namespace AddressBook
             }
         }
 
+        public void WriteToFile(string filepath)
+        {
+            using (StreamWriter stream = File.AppendText(filepath))
+            {
+                foreach (var data in dict)
+                {
+                    stream.WriteLine(data.Key);
+                    foreach (var contact in data.Value)
+                    {
+                        stream.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber
+                            + "\n" + contact.Email);
+                    }
+                }
+                stream.Close();
+            }
+        }
+        public void ReadFromFile(string filepath)
+        {
+            using (StreamReader stream = File.OpenText(filepath))
+            {
+                string s = "";
+                while ((s = stream.ReadLine()) != null)
+                {
+                    Console.WriteLine(s);
+                }
+            }
+        }
+
+        public void WriteToJsonFile(string filepath)
+        {
+            var json = JsonConvert.SerializeObject(dict);
+            File.WriteAllText(filepath, json);
+        }
+        public void ReadFromJsonFile(string filepath)
+        {
+            var json = File.ReadAllText(filepath);
+            dict = JsonConvert.DeserializeObject<Dictionary<string, List<Contact>>>(json);
+            DisplayDict(dict);
+        }
     }
 }
