@@ -11,9 +11,9 @@ namespace AddressBook
     public class Addressbook
     {
         List<Contact> addressbooklist = new List<Contact>();
-        Dictionary<string, List<Contact>> dict = new Dictionary<string, List<Contact>>();
-        Dictionary<string, List<Contact>> stateDict = new Dictionary<string, List<Contact>>();
-        Dictionary<string, List<Contact>> cityDict = new Dictionary<string, List<Contact>>();
+        public Dictionary<string, List<Contact>> dict = new Dictionary<string, List<Contact>>();
+        public Dictionary<string, List<Contact>> stateDict = new Dictionary<string, List<Contact>>();
+        public Dictionary<string, List<Contact>> cityDict = new Dictionary<string, List<Contact>>();
         int stateCount, cityCount;
         public void CreateContact()
         {
@@ -140,48 +140,100 @@ namespace AddressBook
         public bool CheckName(Contact contact)
         {
             string name = contact.FirstName;
-            List<Contact> list2 = null;
             foreach (var data in dict)
             {
-                list2 = data.Value.Where(x => x.FirstName.Equals(name)).ToList();
+                foreach (var item in data.Value)
+                {
+                    if (item.FirstName.Equals(name))
+                    {
+                        return true;
+                    }
+                }
             }
-            if (list2 == null)
+            return false;
+        }
+
+
+        public void SearchByState()
+        {
+            foreach (var data in dict.Values)
             {
-                return false;
+                foreach (var item in data)
+                {
+                    if (!stateDict.Keys.Equals(item.State) && !stateDict.ContainsKey(item.State))
+                    {
+                        List<Contact> list = new List<Contact>();
+                        list.Add(item);
+                        stateDict.Add(item.State, list);
+                    }
+                    else
+                    {
+                        foreach (var states in stateDict)
+                        {
+                            if (states.Key.Equals(item.State))
+                            {
+                                states.Value.Add(item);
+                            }
+                        }
+                    }
+
+                }
             }
-            return true;
+        }
+
+        public void SearchByCity()
+        {
+            foreach (var data in dict.Values)
+            {
+                foreach (var item in data)
+                {
+                    if (!cityDict.Keys.Equals(item.City))
+                    {
+                        List<Contact> list = new List<Contact>();
+                        list.Add(item);
+                        cityDict.Add(item.City, list);
+                    }
+                    else
+                    {
+                        foreach (var cities in cityDict)
+                        {
+                            if (cities.Key.Equals(item.City))
+                            {
+                                cities.Value.Add(item);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void GetDetailsFromState(string input)
         {
-            List<Contact> result = null;
-            foreach (var data in dict)
+            stateCount = 0;
+            foreach (var data in stateDict)
             {
-                result = data.Value.Where(x => x.State.Equals(input)).ToList();
+                if (data.Key.Equals(input))
+                {
+                    Console.WriteLine("State : " + data.Key);
+                    var slist = stateDict.GetValueOrDefault(data.Key);
+                    DisplayList(slist.ToList());
+                    stateCount = slist.Count;
+                }
             }
-            if (stateDict.ContainsKey(input))
-            {
-                stateDict.Add(input, result);
-                stateCount = result.Count;
-            }
-            DisplayDict(stateDict);
-
-
         }
         public void GetDetailsFromCity(string input)
         {
-            List<Contact> result = null;
-            foreach (var data in dict)
+            cityCount = 0;
+            foreach (var data in cityDict)
             {
-                result = data.Value.Where(x => x.City.Equals(input)).ToList();
+                if (data.Key.Equals(input))
+                {
+                    Console.WriteLine("City : " + data.Key);
+                    var clist = cityDict.GetValueOrDefault(data.Key);
+                    DisplayList(clist.ToList());
+                    cityCount = clist.Count;
+                }
             }
-            if (!cityDict.ContainsKey(input))
-            {
-
-                cityDict.Add(input, result);
-                cityCount = result.Count;
-            }
-            DisplayDict(cityDict);
         }
         public void GetContactCountFromState(string input)
         {
@@ -194,6 +246,80 @@ namespace AddressBook
             GetDetailsFromCity(input);
             Console.WriteLine("Count : " + cityCount);
 
+        }
+
+        public void SortEntries(int input)
+        {
+            List<string> list = new List<string>();
+            List<Contact> contacts = new List<Contact>();
+            switch (input)
+            {
+                case 1:
+                    foreach (var data in dict)
+                    {
+                        foreach (var item in data.Value)
+                        {
+                            list.Add(item.FirstName);
+                            contacts.Add(item);
+                        }
+                    }
+                    list.Sort();
+                    foreach (var data in list)
+                    {
+                        foreach (var contact in contacts)
+                        {
+                            if (contact.FirstName.Equals(data))
+                            {
+                                Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    foreach (var data in dict)
+                    {
+                        foreach (var item in data.Value)
+                        {
+                            list.Add(item.State);
+                            contacts.Add(item);
+                        }
+                    }
+                    list.Sort();
+                    foreach (var data in list)
+                    {
+                        foreach (var contact in contacts)
+                        {
+                            if (contact.State.Equals(data))
+                            {
+                                Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    foreach (var data in dict)
+                    {
+                        foreach (var item in data.Value)
+                        {
+                            list.Add(item.City);
+                            contacts.Add(item);
+                        }
+                    }
+                    list.Sort();
+                    foreach (var data in list)
+                    {
+                        foreach (var contact in contacts)
+                        {
+                            if (contact.City.Equals(data))
+                            {
+                                Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                                Console.WriteLine("-------");
+                                Console.WriteLine();
+                            }
+                        }
+                    }
+                    break;
+            }
         }
         public void DisplayDict(Dictionary<string, List<Contact>> dict)
         {
@@ -212,6 +338,7 @@ namespace AddressBook
             foreach (var contact in list)
             {
                 Console.WriteLine(contact.FirstName + "\n" + contact.LastName + "\n" + contact.Address + "\n" + contact.City + "\n" + contact.State + "\n" + contact.Zip + "\n" + contact.PhoneNumber + "\n" + contact.Email);
+                Console.WriteLine();
             }
         }
 
