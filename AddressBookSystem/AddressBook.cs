@@ -15,6 +15,7 @@ namespace AddressBook
         public Dictionary<string, List<Contact>> stateDict = new Dictionary<string, List<Contact>>();
         public Dictionary<string, List<Contact>> cityDict = new Dictionary<string, List<Contact>>();
         int stateCount, cityCount;
+
         public void CreateContact()
         {
             Console.WriteLine("Enter the details\n1.First Name\n2.Last Name\n3.Address \n4.City Name \n5.State Name \n6.Zip code \n7.Phone Number \n8.Email Address ");

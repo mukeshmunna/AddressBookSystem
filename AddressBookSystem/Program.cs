@@ -14,7 +14,7 @@ namespace AddressBook
             bool flag = true;
             while (flag)
             {
-                Console.WriteLine("1.Create Contact\n2.Add to Dictionary\n3.Edit Contact\n4.Display Contacts\n5.Delete Contact\n6.Serialize dict to JSON\n7.Search From state using dictionary\n8.Search From city using dictionary\n9.Number of contact in state\n10.Number of contact in city\n11.AddToCityAndStateDictionary\n12.Sort the entries\n16.Exit");
+                Console.WriteLine("1.Create Contact\n2.Add to Dictionary\n3.Edit Contact\n4.Display Contacts\n5.Delete Contact\n6.Serialize dict to JSON\n7.Search From state using dictionary\n8.Search From city using dictionary\n9.Number of contact in state\n10.Number of contact in city\n11.AddToCityAndStateDictionary\n12.Sort the entries\n16.Exit ");
                 int choice = Convert.ToInt32(Console.ReadLine());
                 string key;
                 switch (choice)
